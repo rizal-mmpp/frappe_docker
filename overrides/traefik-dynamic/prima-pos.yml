@@ -1,4 +1,15 @@
 http:
+  middlewares:
+    secure-headers:
+      headers:
+        sslRedirect: true
+        stsSeconds: 63072000
+        stsIncludeSubdomains: true
+        stsPreload: true
+        contentTypeNosniff: true
+        browserXssFilter: true
+        referrerPolicy: "same-origin, strict-origin-when-cross-origin"
+        contentSecurityPolicy: "upgrade-insecure-requests; block-all-mixed-content"
   routers:
     prima-pos-http:
       rule: "Host(`pos.washopp.com`)"
@@ -6,6 +17,7 @@ http:
         - http
       middlewares:
         - https-redirect
+        - secure-headers
       service: prima-pos
     prima-pos-https:
       rule: "Host(`pos.washopp.com`)"
@@ -13,6 +25,8 @@ http:
         - https
       tls:
         certResolver: le
+      middlewares:
+        - secure-headers
       service: prima-pos
   services:
     prima-pos:
