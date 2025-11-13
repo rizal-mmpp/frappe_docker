@@ -4,6 +4,9 @@ services:
   traefik:
     image: "traefik:v2.11"
     restart: unless-stopped
+    environment:
+      DOCKER_API_VERSION: "1.52"
+      DOCKER_HOST: "unix:///var/run/docker.sock"
     labels:
       # Enable Traefik for this service, to make it available in the public network
       - traefik.enable=true

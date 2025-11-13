@@ -1,0 +1,21 @@
+http:
+  routers:
+    prima-pos-http:
+      rule: "Host(`pos.washopp.com`)"
+      entryPoints:
+        - http
+      middlewares:
+        - https-redirect
+      service: prima-pos
+    prima-pos-https:
+      rule: "Host(`pos.washopp.com`)"
+      entryPoints:
+        - https
+      tls:
+        certResolver: le
+      service: prima-pos
+  services:
+    prima-pos:
+      loadBalancer:
+        servers:
+          - url: "http://prima-pos-frontend-1:8080"

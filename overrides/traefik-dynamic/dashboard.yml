@@ -1,0 +1,29 @@
+http:
+  middlewares:
+    https-redirect:
+      redirectScheme:
+        scheme: https
+        permanent: true
+    admin-auth:
+      basicAuth:
+        users:
+          - "admin:$apr1$ZzZAVWBa$68gSRPtryG30BEeprXBn./"
+
+  routers:
+    traefik-public-http:
+      rule: "Host(`traefik.washopp.com`)"
+      entryPoints:
+        - http
+      middlewares:
+        - https-redirect
+      service: api@internal
+
+    traefik-public-https:
+      rule: "Host(`traefik.washopp.com`)"
+      entryPoints:
+        - https
+      tls:
+        certResolver: le
+      middlewares:
+        - admin-auth
+      service: api@internal
